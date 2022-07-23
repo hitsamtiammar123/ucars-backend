@@ -1,9 +1,7 @@
 from typing import Union
-
-from fastapi import FastAPI, Query, Path
+from main import app
+from fastapi import  Query, Path
 from pydantic import BaseModel, Required
-
-app = FastAPI()
 
 class Item(BaseModel):
     name: str
