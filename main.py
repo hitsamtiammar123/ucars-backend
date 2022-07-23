@@ -1,30 +1,13 @@
 from typing import Union
-from main import app
-from fastapi import  Query, Path
+from fastapi import  FastAPI
 from pydantic import BaseModel, Required
+from router import brand, model
 
-class Item(BaseModel):
-    name: str
-    description: Union[str, None] = None
-    price: float
-    tax: Union[float, None] = None
+app = FastAPI()
 
+app.include_router(brand.router)
+app.include_router(model.router)
 
-@app.get("/")
-async def read_root():
-    return {"Hello": "World Hehehe test"}
-
-
-@app.get("/items/{item_id}")
-async def read_item(
-  item_id: int =  Path(title="Id of an item"), 
-  q: Union[str, None] = Query(default = Required, max_length = 4)
-  ):
-    print(q)
-    print('test')
-    return {"item_id": item_id, "q": q}
-  
-
-@app.post('/test-post')
-async def test_post(item:Item):
-  return item
+@app.get('/')
+async def index():
+  return {"message": "Hello World"}
