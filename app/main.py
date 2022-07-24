@@ -1,7 +1,7 @@
 from typing import Union
 from fastapi import  FastAPI
 from pydantic import BaseModel, Required
-from router import brand, model
+from .router import brand, model
 
 app = FastAPI()
 
