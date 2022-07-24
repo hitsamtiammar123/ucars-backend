@@ -3,7 +3,8 @@ from fastapi import APIRouter, Path, Depends, HTTPException
 from sqlalchemy import update
 from ..dependencies import get_db
 from ..database import Session, Brand
-from ..schemas import BrandInput, Base
+from ..schemas import BrandInput
+from ..exception import UnicornException
 from ..util import filterNoneDictValue
 
 router = APIRouter(
@@ -31,7 +32,7 @@ def create(brand: BrandInput, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_user)
   except:
-    raise HTTPException(status_code=500, detail="An error occured")
+    raise UnicornException(status_code=500, message="An error occured")
   
   return {'status': 201, 'message': "Brand has been created", 'brand': brand}
 
@@ -47,9 +48,14 @@ def update(
     d = query_find.update({**input.__dict__, 'updated_at' : datetime.now() })
     db.commit()
   except:
-    raise HTTPException(status_code=500, detail="An error occured")
+    raise UnicornException(status_code=500, detail="An error occured")
   return {'status': 200, 'message': "Brand Update: " + str(id), 'brand': input, 'result': d}
 
 @router.delete('/{id}')
-def delete(id: int = Path(title = 'The ID of a brand')):
-  return {'index': "Brand index: " + id}
+def delete(db: Session = Depends(get_db), id: int = Path(title = 'The ID of a brand')):
+  try:
+    d = db.query(Brand).filter(Brand.id == id).delete()
+    db.commit()
+  except:
+    raise UnicornException(status_code=500, detail="An error occured")
+  return {'status': 200, 'message': "Brand Delete: " + str(id), 'brand_id': id, 'result': d}
