@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Boolean, Column, \
-  ForeignKey, Integer, String, Text, DateTime
+  ForeignKey, Integer, String, Text, DateTime, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from sqlalchemy.sql.expression import text
@@ -41,6 +41,7 @@ class Model(Base):
   description = Column(Text, index =True)
   image_url = Column(Text, index =True)
   status = Column(Boolean, index =True)
+  price = Column(Numeric, index = True)
   created_at = Column(
         DateTime(timezone=False),
         nullable=False,
