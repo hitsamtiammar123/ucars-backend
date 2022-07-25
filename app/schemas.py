@@ -29,12 +29,6 @@ class ModelInput(ModelBase):
 
 class Brand(BrandBase):
   models: List[ModelBase] = []
-  
-  class Config:
-        orm_mode = True
         
 class Model(ModelBase):
   brand: Union[BrandBase, None] = None
-  
-  class Config:
-        orm_mode = True
