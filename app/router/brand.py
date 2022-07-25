@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy import desc
 from fastapi import APIRouter, Path, Depends, Query
 from ..dependencies import get_db, validate_token
 from ..database import Session, Brand, Model
@@ -27,7 +28,7 @@ def index(
     brands = brands.filter(Brand.name.ilike('%' + search + '%'))
   
   brands_count = brands.count()
-  brands = brands.order_by(Brand.created_at)
+  brands = brands.order_by(desc(Brand.created_at))
   brands = brands.limit(limit).offset(offset)
   brands = brands.all()
   
