@@ -27,6 +27,7 @@ def index(
     brands = brands.filter(Brand.name.ilike('%' + search + '%'))
   
   brands_count = brands.count()
+  brands = brands.order_by(Brand.created_at)
   brands = brands.limit(limit).offset(offset)
   brands = brands.all()
   

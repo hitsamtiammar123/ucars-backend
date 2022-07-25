@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import traceback
 import jwt
 import os
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import  FastAPI, Request
 from fastapi.responses import JSONResponse
 from .router import brand, model
@@ -13,6 +14,16 @@ app = FastAPI()
 
 app.include_router(brand.router)
 app.include_router(model.router)
+
+origins = ['*']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.exception_handler(UnicornException)
 def unicorn_exception_handler(request: Request, exc: UnicornException):

@@ -26,6 +26,7 @@ def index(
     models = models.filter(Model.name.ilike('%' + search + '%'))
   
   models_count = models.count()
+  brands = brands.order_by(Model.created_at)
   models = models.limit(limit).offset(offset)
   models = models.all()
   
